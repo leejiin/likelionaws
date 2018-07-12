@@ -1,0 +1,61 @@
+<!--<style>-->
+<!--   #tea>p{-->
+<!--        border:1px solid red;-->
+<!--    }-->
+<!--</style>-->
+
+<div class="container">
+    <h1><%= @post.title %></h1><hr /> <!-- 제목 출력 -->
+    
+    <div style="text-align:right;"> <!-- 작성자 수정 삭제 만들기 -->
+        <div><%= @post.created_at.to_s.split("+").first %>, <%= time_ago_in_words(@post.created_at) %> ago</div>
+        <div><%= @post.user.username %></div>
+        <a href="/post/edit/<%= @post.id %>">
+            <span class="badge badge-danger">수정</span>
+        </a>
+        <a href="/post/destroy/<%= @post.id %>">
+            <span class="badge badge-warning">삭제</span>
+        </a>
+        
+        <div><%= @post.liked_users.size %>명이 좋아합니다</div>
+        <% if current_user.is_like?(@post) %>
+           <a href = "/likes/likes_toggle/<%= @post.id %>">좋아요 취소</a>
+           <!--<#%= link_to "좋아요 취소", likes_likes_toggle_path(@post), method: "post" %>-->
+        <% else %>
+           <a href = "/likes/likes_toggle/<%= @post.id %>">좋아요</a>
+           <!--<#%= link_to "좋아요", likes_likes_toggle_path(@post), method: "post" %>-->
+        <% end %>
+        
+    </div>
+    
+    <!--<div id ="tea" style="border:1px solid black"> <%= simple_format(@post.content) %> </div> <br><br><br><br> <!-- 내용 출력 -->
+    
+    <p><%= simple_format(@post.content) %></p><br> <!-- 내용 출력 -->
+    
+    <% unless @post.image.nil? %>
+        <%= image_tag @post.image %>
+         <%= image_tag @post.thumb %>
+          <%= image_tag @post.middle %><br><br><br> <!-- 사진 출력 -->
+    <% end %>
+    
+    <!-- 댓글 출력 -->
+    <% @post.replies.each do |r| %> <!-- replies 단 복수 확인 잘 해야해 -->
+       <%= r.user.username %> :  <%= r.content %>
+       <a href="/reply/destroy/<%= r.id %>">
+            <span class="badge badge-warning">삭제</span>
+        </a>
+       <br>
+    <% end %> <br>
+    
+   
+    
+    <!-- 댓글 작성 폼 만들기 -->
+    <form action="/reply/create" method = "post">
+        <input name ="post_id" value="<%= @post.id %>" hidden ="true"> 
+        <div class="row">
+                <textarea name="content" class="form-control col-11" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <button type="submit" class="btn btn-info col-1">댓글 작성</button>
+        </div>
+    </form>
+    
+</div>

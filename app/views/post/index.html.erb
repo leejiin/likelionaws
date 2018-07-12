@@ -1,0 +1,30 @@
+<%= render "navbar" %>
+<div class="container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">번호</th>
+          <th scope="col">제목</th>
+          <th scope="col">작성자</th>
+          <th scope="col">작성시간</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @post.each do |p| %>
+        <tr>
+          <th scope="row"><%= p.id %></th>
+         
+          <td> <a href = "/post/show/<%= p.id %>"><%= p.title %></a></td> 
+          <!-- 타이틀 전체 링크 걸기 -- 근데 다 똑같은 글로 가니까 글을 구분해줘야해 글 번호로 구분하자--> 
+          
+          <td><%= p.user.username %></td>
+          <td><%= p.created_at %></td> 
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <a href = "/post/new">
+         <button type="button" class="btn btn-success">글쓰기</button>
+    </a>
+</div>
